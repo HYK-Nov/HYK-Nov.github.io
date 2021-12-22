@@ -1,5 +1,5 @@
-import "./App.css";
 import Clock from "./rush-hour-timer/Clock";
+import * as React from "react";
 
 function App() {
   return (

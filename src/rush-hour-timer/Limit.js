@@ -36,7 +36,7 @@ function Limit(props) {
         title: "Go Home",
         text: "집에 가라",
         showConfirmButton: false,
-        timer: 2000,
+        timer: 3000,
       });
       clearInterval(interval.current);
     }

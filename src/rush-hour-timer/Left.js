@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import React from "react";
 
 function Left(props) {
@@ -7,13 +8,19 @@ function Left(props) {
 
   return (
     <div>
-      <h2>Left</h2>
-      <h1>
+      <Typography
+        variant="h5"
+        gutterBottom
+        component="div"
+        style={{ fontWeight: "bold" }}
+      >
+        LEFT
+      </Typography>
+      <Typography variant="h4" gutterBottom component="div">
         {String(hour).padStart(2, "0")}:{String(min).padStart(2, "0")}:
         {String(sec).padStart(2, "0")}
-        <br />
-        {/* {hour}시간 {min}분 {sec}초 */}
-      </h1>
+      </Typography>
+      <br />
     </div>
   );
 }
