@@ -179,8 +179,9 @@ function Clock() {
                 <Box
                   id={idx}
                   sx={{
-                    height: "2rem",
-                    width: "2rem",
+                    width: "2em",
+                    height: "1.5em",
+                    position: "absolute",
                     backgroundColor: value,
                     borderRadius: 1,
                     "&:hover": {
