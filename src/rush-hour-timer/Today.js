@@ -32,6 +32,7 @@ function Today(props) {
           component="span"
           style={{
             color: day_E[props.date.getDay() - 1][1],
+            fontWeight: "bold",
           }}
         >
           {day_E[props.date.getDay() - 1][0]}

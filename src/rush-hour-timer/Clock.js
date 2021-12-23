@@ -8,16 +8,27 @@ import {
   Button,
   Collapse,
   Container,
+  Grid,
   IconButton,
-  List,
-  ListItem,
   Stack,
   TextField,
   Typography,
+  Box,
 } from "@mui/material";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
-import DirectionsRunRoundedIcon from "@mui/icons-material/DirectionsRunRounded";
+import {
+  red,
+  pink,
+  deepPurple,
+  lightBlue,
+  lime,
+  amber,
+} from "@mui/material/colors";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  CloseRounded,
+  AccessTimeFilledRounded,
+  DirectionsRunRounded,
+} from "@mui/icons-material";
 import Swal from "sweetalert2";
 
 function Clock() {
@@ -46,9 +57,32 @@ function Clock() {
     setLimitMin(document.getElementById("setTimer").value.slice(3, 5));
   };
 
+  //MUI 관련
+  const themeColor = [
+    red[400],
+    pink[400],
+    deepPurple[400],
+    lightBlue[400],
+    lime[400],
+    amber[400],
+  ];
+  const [changeThemeColor, setChangeThemeColor] = useState(0);
+  const buttonTheme = createTheme({
+    palette: {
+      primary: {
+        main: themeColor[changeThemeColor],
+      },
+    },
+  });
+  document.body.style.backgroundColor = themeColor[changeThemeColor];
+
+  const changeTheme = (e) => {
+    setChangeThemeColor(e.target.getAttribute("id"));
+  };
+
   return (
-    <Container maxWidth="xs">
-      <Collapse in={open} style={{ margin: "1rem 0 1rem 0" }}>
+    <Container maxWidth="xs" variant="middle">
+      <Collapse in={open} sx={{ mt: 2 }}>
         <Alert
           severity="error"
           action={
@@ -60,49 +94,57 @@ function Clock() {
                 setOpen(false);
               }}
             >
-              <CloseRoundedIcon fontSize="inherit" />
+              <CloseRounded fontSize="inherit" />
             </IconButton>
           }
-          sx={{ mb: 1 }}
         >
           <strong>당일</strong> 퇴근 할 경우에만 쓰세요
         </Alert>
       </Collapse>
-      <Stack spacing={2}>
-        <Avatar
-          sx={{
-            mx: "auto",
-            bgcolor: "#2196f3",
-            width: "3.5rem",
-            height: "3.5rem",
-          }}
-        >
-          <DirectionsRunRoundedIcon fontSize="large" />
-        </Avatar>
-        <Typography
-          variant="h5"
-          gutterBottom
-          component="div"
-          sx={{ textAlign: "center" }}
-        >
-          RUSH HOUR TIMER
-        </Typography>
-        <List sx={{ bgcolor: "white" }}>
-          <ListItem>
-            <Today date={now} />
-          </ListItem>
-          <ListItem>
-            <Now date={now} />
-          </ListItem>
-          <ListItem>
-            <Limit limitHour={limitHour} limitMin={limitMin} />
-          </ListItem>
-          <ListItem>
-            <Stack component="form" direction="row" spacing={2} noValidate>
-              {/* <Typography variant="h6" gutterBottom>
-                TIME SET &nbsp;
-              </Typography> */}
-              {/* <input id={"setTimer"} type={"time"} defaultValue={"18:00"} /> */}
+      <Box
+        sx={{
+          my: 2,
+          py: 3,
+          px: 5,
+          boxShadow: 2,
+          borderRadius: 3,
+          display: "flex",
+        }}
+        style={{ backgroundColor: "white" }}
+      >
+        <Stack spacing={2}>
+          <Avatar
+            sx={{
+              mx: "auto",
+              bgcolor: themeColor[changeThemeColor],
+              width: "3.5rem",
+              height: "3.5rem",
+              mt: 2,
+            }}
+          >
+            <DirectionsRunRounded fontSize="large" />
+          </Avatar>
+          <Typography
+            variant="h5"
+            gutterBottom
+            component="div"
+            sx={{ textAlign: "center" }}
+          >
+            RUSH HOUR TIMER
+          </Typography>
+          <Grid container spacing={2} sx={{ py: 3 }}>
+            <Grid item xs={12}>
+              <Today date={now} />
+            </Grid>
+            <Grid item xs={12}>
+              <Now date={now} />
+            </Grid>
+            <Grid item xs={12}>
+              <Limit limitHour={limitHour} limitMin={limitMin} xs={12} />
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs={8} sx={{ pr: 1 }}>
               <TextField
                 id="setTimer"
                 label="Time Setting"
@@ -114,20 +156,47 @@ function Clock() {
                 inputProps={{
                   step: 300, // 5 min
                 }}
-                sx={{ width: "13rem" }}
+                style={{ width: "100%" }}
               />
-              <Button
-                variant="contained"
-                onClick={setTimerOnClick}
-                startIcon={<AccessTimeFilledRoundedIcon />}
-              >
-                APPLY
-              </Button>
-            </Stack>
-          </ListItem>
-        </List>
-        <br />
-      </Stack>
+            </Grid>
+            <Grid item xs={4} sx={{ pl: 1 }}>
+              <ThemeProvider theme={buttonTheme}>
+                <Button
+                  variant="contained"
+                  onClick={setTimerOnClick}
+                  startIcon={<AccessTimeFilledRounded />}
+                  color={buttonTheme.primary}
+                  style={{ height: "100%" }}
+                >
+                  APPLY
+                </Button>
+              </ThemeProvider>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ pt: 2 }}>
+            {themeColor.map((value, idx) => (
+              <Grid key={idx} item xs>
+                <Box
+                  id={idx}
+                  sx={{
+                    height: "2rem",
+                    width: "2rem",
+                    backgroundColor: value,
+                    borderRadius: 1,
+                    "&:hover": {
+                      backgroundColor: value,
+                      opacity: [0.9, 0.8, 0.7],
+                    },
+                    mx: 1,
+                  }}
+                  onClick={changeTheme}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <br />
+        </Stack>
+      </Box>
     </Container>
   );
 }

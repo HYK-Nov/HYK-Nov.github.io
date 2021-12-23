@@ -30,7 +30,7 @@ function Now(props) {
           variant="h5"
           gutterBottom
           component="span"
-          style={{ color: meridiemInfo[meridiem][1] }}
+          style={{ color: meridiemInfo[meridiem][1], fontWeight: "bold" }}
         >
           {meridiemInfo[meridiem][0]}
         </Typography>
