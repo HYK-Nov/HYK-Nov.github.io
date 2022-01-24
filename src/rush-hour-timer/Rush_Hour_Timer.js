@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Limit from "./Limit";
 import Now from "./Now";
 import Today from "./Today";
@@ -14,6 +14,8 @@ import {
   TextField,
   Typography,
   Box,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   red,
@@ -28,10 +30,13 @@ import {
   CloseRounded,
   AccessTimeFilledRounded,
   DirectionsRunRounded,
+  MenuRounded,
+  HomeRounded,
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
-function Clock() {
+function Rush_Hour_Timer() {
   let now = new Date();
   // const [hour, setHour] = useState(now.getHours());
   // const [min, setMin] = useState(now.getMinutes());
@@ -39,7 +44,7 @@ function Clock() {
   const interval = useRef(null);
   const [limitHour, setLimitHour] = useState("18");
   const [limitMin, setLimitMin] = useState("00");
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     interval.current = setInterval(() => {
@@ -49,6 +54,19 @@ function Clock() {
       setSec(now.getSeconds());
     }, 1000);
     return () => clearInterval(interval.current);
+  }, []);
+
+  useEffect(() => {
+    if (now.getDay() === 6 || now.getDay() === 7) {
+      Swal.fire({
+        title: "저런! 오늘은 주말이랍니다",
+        text: "일하러 나오셨다니 안타깝군요",
+        imageUrl:
+          "https://w.namu.la/s/dcac377b449edd131d6a622ba068e29295fc0600192b61a4402cf2dd96b4dd4a9ee3eb5ee4ac8fc6a55c5b3b53f25ae3b4a2245fa9bfbcb8f6cddf9bf6129d751e0bbc148176715a8be0e1394dbfe4c7b17511ca4bb2f07e1af144576734028ba4d573bc34579d28e22b7d69831d3983",
+        imageWidth: 250,
+        imageHeight: 250,
+      });
+    }
   }, []);
 
   const setTimerOnClick = (e) => {
@@ -66,7 +84,7 @@ function Clock() {
     lime[400],
     amber[400],
   ];
-  const [changeThemeColor, setChangeThemeColor] = useState(0);
+  const [changeThemeColor, setChangeThemeColor] = useState(5);
   const buttonTheme = createTheme({
     palette: {
       primary: {
@@ -82,7 +100,10 @@ function Clock() {
 
   return (
     <Container maxWidth="xs" variant="middle">
-      <Collapse in={open} sx={{ mt: 2 }}>
+      <Link to="/">
+        <HomeRounded fontSize="large" sx={{ color: "white", pt: 2 }} />
+      </Link>
+      <Collapse in={open} sx={{ pt: 1 }}>
         <Alert
           severity="error"
           action={
@@ -91,7 +112,7 @@ function Clock() {
               color="inherit"
               size="small"
               onClick={() => {
-                setOpen(false);
+                setOpen(!open);
               }}
             >
               <CloseRounded fontSize="inherit" />
@@ -113,26 +134,47 @@ function Clock() {
         style={{ backgroundColor: "white" }}
       >
         <Stack spacing={2}>
-          <Avatar
+          <Grid
+            container
+            spacing={2}
             sx={{
-              mx: "auto",
-              bgcolor: themeColor[changeThemeColor],
-              width: "3.5rem",
-              height: "3.5rem",
-              mt: 2,
+              display: "flex",
+              justifyContent: "flex-end",
             }}
           >
-            <DirectionsRunRounded fontSize="large" />
-          </Avatar>
-          <Typography
-            variant="h5"
-            gutterBottom
-            component="div"
-            sx={{ textAlign: "center" }}
-          >
-            RUSH HOUR TIMER
-          </Typography>
-          <Grid container spacing={2} sx={{ py: 3 }}>
+            <Grid item>
+              <IconButton aria-label="menu">
+                <MenuRounded />
+              </IconButton>
+              <Menu id="basic-menu">
+                <MenuItem>Profile</MenuItem>
+                <MenuItem>My account</MenuItem>
+                <MenuItem>Logout</MenuItem>
+              </Menu>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2 }}>
+            <Grid item xs={12} sx={{ pb: 3 }}>
+              <Avatar
+                sx={{
+                  mx: "auto",
+                  bgcolor: themeColor[changeThemeColor],
+                  width: "3.5rem",
+                  height: "3.5rem",
+                  mt: 2,
+                }}
+              >
+                <DirectionsRunRounded fontSize="large" />
+              </Avatar>
+              <Typography
+                variant="h5"
+                gutterBottom
+                component="div"
+                sx={{ textAlign: "center", mt: 2 }}
+              >
+                RUSH HOUR TIMER
+              </Typography>
+            </Grid>
             <Grid item xs={12}>
               <Today date={now} />
             </Grid>
@@ -173,7 +215,7 @@ function Clock() {
               </ThemeProvider>
             </Grid>
           </Grid>
-          <Grid container sx={{ pt: 2 }}>
+          <Grid container sx={{ pt: 2, pb: 1 }}>
             {themeColor.map((value, idx) => (
               <Grid key={idx} item xs>
                 <Box
@@ -201,4 +243,4 @@ function Clock() {
     </Container>
   );
 }
-export default Clock;
+export default Rush_Hour_Timer;
